@@ -5,6 +5,9 @@ const path = require('path');
 
 /*
  * setting up multer storage engine.  
+ * stores files in folder (public/uploads) => is made if not already 
+ * 
+ * 
  */
 const storage = multer.diskStorage({
   destination: './public/uploads/',
@@ -12,7 +15,6 @@ const storage = multer.diskStorage({
     cb(null,file.fieldname + '-' + Date.now() + path.extname(file.originalname));
   }
 });
-
 /*
  * upload object 
  */
@@ -24,7 +26,13 @@ const upload = multer({
   }
 }).single('myImage');
 
-// Check File Type
+/*
+ * 
+ * @param {*} file 
+ * @param {*} cb 
+ * function to check if filetpye is valid
+ * can be set in const filetype = see multer documentation for available options 
+ */
 const checkFileType = (file, cb) =>{
   // Allowed ext
   const filetypes = /jpeg|jpg|png|gif/;
