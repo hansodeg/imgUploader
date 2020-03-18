@@ -32,11 +32,7 @@ app.post('/upload', (req, res) => {
     }
   });
 });
-
-
-
 app.listen(PORT, () => console.log(`Server started on PORT ${PORT}`));
-
 /*
  * setting up multer storage engine.  
  * stores files in folder (public/uploads) => is made if not already in express static after init
