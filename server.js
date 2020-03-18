@@ -5,7 +5,7 @@ const path = require('path');
 
 /*
  * setting up multer storage engine.  
- * stores files in folder (public/uploads) => is made if not already 
+ * stores files in folder (public/uploads) => is made if not already in express static after init
  * 
  * 
  */
