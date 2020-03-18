@@ -2,12 +2,44 @@ const express = require('express');
 const multer = require('multer');
 const ejs = require('ejs');
 const path = require('path');
+const PORT = process.env.PORT || 666;
+const app = express();
+
+app.set('view engine', 'ejs');
+
+/*
+* make public folder
+*/
+app.use(express.static('./public'));
+app.get('/', (req, res) => res.render('index'));
+app.post('/upload', (req, res) => {
+  upload(req, res, (err) => {
+    if(err){
+      res.render('index', {
+        msg: err
+      });
+    } else {
+      if(req.file == undefined){
+        res.render('index', {
+          msg: 'You must choose a file '
+        });
+      } else {
+        res.render('index', {
+          msg: 'image succesfully updates',
+          file: `uploads/${req.file.filename}`
+        });
+      }
+    }
+  });
+});
+
+
+
+app.listen(PORT, () => console.log(`Server started on PORT ${PORT}`));
 
 /*
  * setting up multer storage engine.  
  * stores files in folder (public/uploads) => is made if not already in express static after init
- * 
- * 
  */
 const storage = multer.diskStorage({
   destination: './public/uploads/',
@@ -48,38 +80,3 @@ const checkFileType = (file, cb) =>{
   }
 }
 
-// Init app
-const app = express();
-
-// EJS
-app.set('view engine', 'ejs');
-
-// Public Folder
-app.use(express.static('./public'));
-
-app.get('/', (req, res) => res.render('index'));
-
-app.post('/upload', (req, res) => {
-  upload(req, res, (err) => {
-    if(err){
-      res.render('index', {
-        msg: err
-      });
-    } else {
-      if(req.file == undefined){
-        res.render('index', {
-          msg: 'Error: No File Selected!'
-        });
-      } else {
-        res.render('index', {
-          msg: 'File Uploaded!',
-          file: `uploads/${req.file.filename}`
-        });
-      }
-    }
-  });
-});
-
-const port = 666;
-
-app.listen(port, () => console.log(`Server started on port ${port}`));
